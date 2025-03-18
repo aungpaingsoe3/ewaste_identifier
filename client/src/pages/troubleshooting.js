@@ -1,7 +1,6 @@
 // Reference:
-// How to Use Deepseek AI API for Free 🚀 Build AI ChatBot 🤖 (100% FREE!) ⚡[WebStylePress] https://www.youtube.com/watch?v=ECxtBChPbk0
+// How to Use Deepseek AI API for Free Build AI ChatBot  (100% FREE!) [WebStylePress] https://www.youtube.com/watch?v=ECxtBChPbk0
 // React Website Tutorial - Beginner React JS Project Fully Responsive [Brian Design] https://www.youtube.com/watch?v=I2UBjN5ER4s
-
 import React, { useState, useEffect } from "react";
 
 function Troubleshooting() {
@@ -24,7 +23,8 @@ function Troubleshooting() {
                 const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                     method: "POST",
                     headers: {
-                        "Authorization": 'Bearer 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',
+                        // "Authorization": 'Bearer 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',
+                        "Authorization": process.env.REACT_APP_OPENROUTER_API_KEY,
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
