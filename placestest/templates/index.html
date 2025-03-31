@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electronics Recycling Locator</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&callback=initMap" async defer></script>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        form {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Find Electronics Recycling Centers Near You</h1>
+    
+    <form method="POST">
+        <input type="text" name="address" placeholder="Enter an address or city" required>
+        <button type="submit">Search</button>
+    </form>
+
+    <div id="map"></div>
+
+    <!-- Store data in data-* attributes -->
+    <div id="user-location" data-lat="{{ user_lat }}" data-lng="{{ user_lon }}"></div>
+    <div id="centers" style="display: none;">
+        {% for center in centers %}
+            <div class="center" data-lat="{{ center.lat }}" data-lng="{{ center.lon }}" data-name="{{ center.name }}"></div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function initMap() {
+            // Get user location from data attributes
+            const userLocation = {
+                lat: parseFloat(document.getElementById('user-location').getAttribute('data-lat')),
+                lng: parseFloat(document.getElementById('user-location').getAttribute('data-lng'))
+            };
+
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: userLocation,
+                zoom: 13
+            });
+
+            // Place a marker for the user's location
+            new google.maps.Marker({
+                position: userLocation,
+                map: map,
+                title: "Searched Location"
+            });
+
+            // Iterate through centers and place markers
+            const centers = document.querySelectorAll('.center');
+            centers.forEach(center => {
+                const lat = parseFloat(center.getAttribute('data-lat'));
+                const lng = parseFloat(center.getAttribute('data-lng'));
+                const name = center.getAttribute('data-name');
+
+                const marker = new google.maps.Marker({
+                    position: { lat, lng },
+                    map: map,
+                    title: name
+                });
+                
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `<strong>${name}</strong>`
+                });
+
+                marker.addListener("click", () => {
+                    infoWindow.open(map, marker);
+                });
+                        });
+        }
+    </script>
+</body>
+</html>
