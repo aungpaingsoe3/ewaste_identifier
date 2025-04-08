@@ -18,4 +18,3 @@ export function TypingAnimation({
 }: TypingAnimationProps) {
   return <TypeAnimation sequence={sequences} wrapper={wrapper} speed={speed} className={className} repeat={repeat} />
 }
-

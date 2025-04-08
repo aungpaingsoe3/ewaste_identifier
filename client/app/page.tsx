@@ -1,7 +1,7 @@
 "use client"
 
 import type * as React from "react"
-import { useState } from "react"
+import { useAppContext } from "@/context/app-context"
 
 import { ThemeToggle } from "@/components/theme-toggle"
 import { TypingAnimation } from "@/components/typing-animation"
@@ -10,32 +10,11 @@ import ResultsSection from "@/components/results-section"
 import { BackgroundEffects } from "@/components/background-effects"
 
 export default function Home() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [showResults, setShowResults] = useState(false)
-  const [formData, setFormData] = useState({
-    deviceName: "",
-    issue: "",
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate processing delay
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setShowResults(true)
-    }, 1500)
-  }
+  const { formData, setFormData, showResults, isSubmitting, handleSubmit } = useAppContext()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const resetForm = () => {
-    setFormData({ deviceName: "", issue: "" })
-    setShowResults(false)
   }
 
   return (
@@ -72,10 +51,9 @@ export default function Home() {
             onChange={handleInputChange}
           />
         ) : (
-          <ResultsSection deviceName={formData.deviceName} issue={formData.issue} onReset={resetForm} />
+          <ResultsSection />
         )}
       </section>
     </main>
   )
 }
-
