@@ -1,162 +1,141 @@
-"use client"
+"use client";
 
-import { ArrowLeft, ExternalLink, MapPin } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
-import { useAppContext } from "@/context/app-context"
+import { useState } from "react";
+import {
+  GoogleMap,
+  Marker,
+  InfoWindow,
+  useJsApiLoader,
+} from "@react-google-maps/api";
 
-import { BackgroundEffects } from "@/components/background-effects"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+// Type definitions for clarity
+interface Center {
+  name: string;
+  lat: number;
+  lng: number;
+  address: string;
+}
+
+const containerStyle = {
+  width: "100%",
+  height: "500px",
+};
+
+const defaultCenter = {
+  lat: 37.7749,
+  lng: -122.4194,
+};
 
 export default function RecyclingPage() {
-  const [zipCode, setZipCode] = useState("")
-  const { formData } = useAppContext()
-  const { deviceName } = formData
+  const [address, setAddress] = useState<string>("");
+  const [userLocation, setUserLocation] = useState<typeof defaultCenter>(defaultCenter);
+  const [centers, setCenters] = useState<Center[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const recyclingOptions = [
-    {
-      name: "EcoTech Recycling Center",
-      description: "Certified e-waste handler that ensures proper disposal of electronics",
-      address: "123 Green Street, Eco City",
-      distance: "2.3 miles",
-      acceptedItems: ["Computers", "Phones", "Tablets", "TVs", "Batteries"],
-      website: "https://example.com/ecotech",
-    },
-    {
-      name: "GreenDrop Electronics",
-      description: "Donation center that refurbishes and donates working electronics to schools",
-      address: "456 Recycle Avenue, Eco City",
-      distance: "3.7 miles",
-      acceptedItems: ["Computers", "Phones", "Tablets", "Printers"],
-      website: "https://example.com/greendrop",
-    },
-    {
-      name: "City Recycling Facility",
-      description: "Municipal recycling center with dedicated e-waste collection",
-      address: "789 Sustainability Blvd, Eco City",
-      distance: "5.1 miles",
-      acceptedItems: ["All electronics", "Batteries", "Light bulbs", "Appliances"],
-      website: "https://example.com/cityrecycling",
-    },
-  ]
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+  });
+
+  const handleSearch = async () => {
+    if (!address) {
+      setError("Please enter an address or ZIP code.");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`/api/search-centers?address=${encodeURIComponent(address)}`);
+      const data = await res.json();
+
+      console.log("API Response Data:", data);
+
+      if (!res.ok) {
+        throw new Error(data.error || "Search failed");
+      }
+
+      setUserLocation({ lat: data.lat, lng: data.lng });
+      setCenters(data.centers);
+    } catch (err: any) {
+      setError(err.message || "An error occurred while fetching data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Use openInfoWindowIndex to track which marker's InfoWindow is open
+  const [openInfoWindowIndex, setOpenInfoWindowIndex] = useState<number | null>(null);
+
+  const handleMarkerClick = (index: number) => {
+    // Toggle the InfoWindow visibility based on index
+    setOpenInfoWindowIndex(openInfoWindowIndex === index ? null : index);
+  };
 
   return (
-    <main className="min-h-screen flex flex-col transition-colors duration-300 relative">
-      <BackgroundEffects />
-
-      <div className="fixed top-4 right-4 z-10">
-        <ThemeToggle />
+    <div className="p-6 space-y-4">
+      <h1 className="text-2xl font-bold">Find Electronics Recycling Centers</h1>
+      <div className="flex gap-2">
+        <input
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="Enter address or ZIP code"
+          className="border px-3 py-2 rounded w-full"
+        />
+        <button
+          onClick={handleSearch}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+          disabled={loading}
+        >
+          {loading ? "Searching..." : "Search"}
+        </button>
       </div>
 
-      <div className="container max-w-4xl py-12 space-y-8 relative z-1">
-        <div className="flex items-center justify-between">
-          <Link href="/">
-            <Button variant="ghost" className="group">
-              <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-              Back to Results
-            </Button>
-          </Link>
-        </div>
+      {error && <p className="text-red-600">{error}</p>}
 
-        <div className="text-center space-y-4">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter">Recycling & E-Waste Disposal</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Find local drop-off centers and learn how to responsibly recycle your {deviceName || "old electronics"}.
-          </p>
-        </div>
+      {isLoaded && (
+        <GoogleMap mapContainerStyle={containerStyle} center={userLocation} zoom={13}>
+          <Marker position={userLocation} label="You" />
 
-        <Card className="backdrop-blur-sm bg-card/90">
-          <CardHeader>
-            <CardTitle>Why Recycle Electronics?</CardTitle>
-            <CardDescription>
-              Electronic waste contains valuable materials that can be recovered and reused, as well as hazardous
-              substances that need proper handling.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-primary/10 rounded-lg">
-                <h3 className="font-medium text-primary mb-2">Reduce Environmental Impact</h3>
-                <p className="text-sm">
-                  Prevents toxic materials like lead, mercury, and cadmium from contaminating soil and water.
-                </p>
-              </div>
-              <div className="p-4 bg-accent/10 rounded-lg">
-                <h3 className="font-medium text-accent mb-2">Conserve Resources</h3>
-                <p className="text-sm">
-                  Recovers valuable materials like gold, silver, copper, and rare earth elements for reuse.
-                </p>
-              </div>
-              <div className="p-4 bg-secondary/10 rounded-lg">
-                <h3 className="font-medium text-secondary-foreground mb-2">Support Communities</h3>
-                <p className="text-sm">
-                  Creates green jobs and provides refurbished technology to schools and low-income families.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">Find Local Recycling Centers</h2>
-            <div className="relative w-48">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Enter ZIP code"
-                className="pl-10"
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
+          {centers.length > 0 ? (
+            centers.map((center, i) => (
+              <Marker
+                key={i}
+                position={{ lat: center.lat, lng: center.lng }}
+                title={center.name}
+                onClick={() => handleMarkerClick(i)} // Handle marker click
               />
-            </div>
-          </div>
+            ))
+          ) : null}
 
-          <div className="grid gap-6">
-            {recyclingOptions.map((option, index) => (
-              <Card key={index} className="backdrop-blur-sm bg-card/90">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle>{option.name}</CardTitle>
-                      <CardDescription>{option.description}</CardDescription>
-                    </div>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <MapPin className="h-4 w-4 mr-1" />
-                      <span>{option.distance}</span>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm mb-2">
-                    <span className="font-medium">Address:</span> {option.address}
-                  </p>
-                  <div>
-                    <span className="text-sm font-medium">Accepted items:</span>
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {option.acceptedItems.map((item, itemIndex) => (
-                        <span key={itemIndex} className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" size="sm" className="ml-auto" asChild>
-                    <Link href={option.website} target="_blank" rel="noopener noreferrer">
-                      Visit Website
-                      <ExternalLink className="ml-2 h-3 w-3" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </div>
-    </main>
-  )
+          {centers.map((center, i) => (
+            openInfoWindowIndex === i && (
+              <InfoWindow
+                key={i}
+                position={{ lat: center.lat, lng: center.lng }}
+                onCloseClick={() => setOpenInfoWindowIndex(null)} // Close InfoWindow on close
+              >
+                <div style={{ color: 'black' }}> 
+                  <h2 className="font-semibold">{center.name}</h2>
+                  <p>{center.address}</p>
+                </div>
+              </InfoWindow>
+            )
+          ))}
+        </GoogleMap>
+      )}
+
+      {centers.length > 0 && (
+        <ul className="space-y-2">
+          {centers.map((center, i) => (
+            <li key={i} className="border p-4 rounded">
+              <strong>{center.name}</strong>
+              <p>{center.address}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
