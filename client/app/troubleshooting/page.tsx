@@ -1,25 +1,38 @@
-"use client"
+"use client";
 
-import { ArrowLeft, HelpCircle, Search, Settings, PenToolIcon as Tool } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
-import { useAppContext } from "@/context/app-context"
+import {
+  ArrowLeft,
+  HelpCircle,
+  Search,
+  Settings,
+  PenToolIcon as Tool,
+} from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { useAppContext } from "@/context/app-context";
 
-import { BackgroundEffects } from "@/components/background-effects"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { BackgroundEffects } from "@/components/background-effects";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export default function TroubleshootingPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const { formData } = useAppContext()
-  const { deviceName } = formData
+  const [searchQuery, setSearchQuery] = useState("");
+  const { formData } = useAppContext();
+  const { deviceName } = formData;
 
   const troubleshootingGuides = [
     {
       title: "Screen Issues",
-      description: "Troubleshoot blank screens, flickering, or display artifacts",
+      description:
+        "Troubleshoot blank screens, flickering, or display artifacts",
       icon: <Settings className="h-5 w-5" />,
       steps: [
         "Check if the device is powered on and has sufficient battery",
@@ -53,15 +66,15 @@ export default function TroubleshootingPage() {
         "Consider resetting to factory settings as a last resort",
       ],
     },
-  ]
+  ];
 
   const filteredGuides = searchQuery
     ? troubleshootingGuides.filter(
         (guide) =>
           guide.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          guide.description.toLowerCase().includes(searchQuery.toLowerCase()),
+          guide.description.toLowerCase().includes(searchQuery.toLowerCase())
       )
-    : troubleshootingGuides
+    : troubleshootingGuides;
 
   return (
     <main className="min-h-screen flex flex-col transition-colors duration-300 relative">
@@ -82,10 +95,12 @@ export default function TroubleshootingPage() {
         </div>
 
         <div className="text-center space-y-4">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter">Troubleshooting Guide</h1>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tighter">
+            Troubleshooting Guide
+          </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Follow these step-by-step instructions to diagnose and fix common issues with your{" "}
-            {deviceName || "electronic device"}.
+            Follow these step-by-step instructions to diagnose and fix common
+            issues with your {deviceName || "electronic device"}.
           </p>
         </div>
 
@@ -104,7 +119,9 @@ export default function TroubleshootingPage() {
             <Card key={index} className="backdrop-blur-sm bg-card/90">
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-full bg-primary/10 text-primary">{guide.icon}</div>
+                  <div className="p-2 rounded-full bg-primary/10 text-primary">
+                    {guide.icon}
+                  </div>
                   <div>
                     <CardTitle>{guide.title}</CardTitle>
                     <CardDescription>{guide.description}</CardDescription>
@@ -124,11 +141,13 @@ export default function TroubleshootingPage() {
 
           {filteredGuides.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted-foreground">No troubleshooting guides found for "{searchQuery}"</p>
+              <p className="text-muted-foreground">
+                No troubleshooting guides found for "{searchQuery}"
+              </p>
             </div>
           )}
         </div>
       </div>
     </main>
-  )
+  );
 }

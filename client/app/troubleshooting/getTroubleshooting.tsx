@@ -1,5 +1,5 @@
-"use server"
-import OpenAI from 'openai';
+"use server";
+import OpenAI from "openai";
 
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
@@ -9,22 +9,30 @@ const openai = new OpenAI({
     "X-Title": "<YOUR_SITE_NAME>", // Optional. Site title for rankings on openrouter.ai.
   },
 });
-export default async function getTroubleshootingGenAIResponse(device: string, issue: string) {
+export default async function getTroubleshootingGenAIResponse(
+  device: string,
+  issue: string
+) {
   const completion = await openai.chat.completions.create({
     model: "google/gemini-flash-1.5-8b-exp",
     messages: [
       {
-        "role": "user",
-        "content": [
+        role: "user",
+        content: [
           {
-            "type": "text",
-            "text": "Provide step-by-step troubleshooting guides for a "+device+" experiencing "+issue+".\nFormat the response as follows:\nA clear heading for the issue (e.g., 'Faulty Power Source').\nStep-by-step instructions for troubleshooting.\nIf applicable, signs to look for (e.g., LED indicators, noises, physical damage)\nBe concise and straightforward",
-          }
-        ]
-      }
+            type: "text",
+            text:
+              "Provide step-by-step troubleshooting guides for a " +
+              device +
+              " experiencing " +
+              issue +
+              ".\nFormat the response as follows:\nA clear heading for the issue (e.g., 'Faulty Power Source').\nStep-by-step instructions for troubleshooting.\nIf applicable, signs to look for (e.g., LED indicators, noises, physical damage)\nBe concise and straightforward",
+          },
+        ],
+      },
     ],
-    
   });
-//   console.log(completion.choices[0].message.content);
+  // console.log("here");
+  // console.log(completion.choices[0].message.content);
   return completion.choices[0].message.content;
 }
