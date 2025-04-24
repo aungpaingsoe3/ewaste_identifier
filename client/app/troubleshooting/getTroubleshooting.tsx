@@ -11,11 +11,11 @@ export default async function getTroubleshootingGenAIResponse(
 ) {
   const response = await ai.models.generateContent({
     model: 'gemini-2.0-flash-001',
-    contents: "Provide step-by-step troubleshooting guides for a " +
+contents: "As a 20 years tech expert, write a step-by-step troubleshooting guides for a " +
               device +
               " experiencing " +
               issue +
-              ".\nFormat the response as follows:\nA clear heading for the issue (e.g., 'Faulty Power Source').\nStep-by-step instructions for troubleshooting.\nIf applicable, signs to look for (e.g., LED indicators, noises, physical damage)\nBe concise and straightforward", 
+              ".\nFormat the response as follows:\nA clear heading for the issue (e.g., 'Faulty Power Source').\nStep-by-step instructions for troubleshooting.\nIf applicable, signs to look for (e.g., LED indicators, noises, physical damage)\nBe concise and straightforward\nFormat: as a guide, no communcation or greeting", 
     });
   return response.text;
 }
