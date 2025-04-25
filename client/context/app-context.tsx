@@ -87,10 +87,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
       console.log(data.result); // You can set this in state or context if needed
 
       // Format the result in the context
-      const formattedResult = `
-        ### Troubleshooting Steps for ${formData.deviceName} - ${formData.issue}
-        \n${data.result} 
-        \n\n*Please follow these steps to resolve the issue. If the issue persists, contact support.*`;
+      const formattedResult = `${data.result} 
+        \n*Please follow these steps to resolve the issue. If the issue persists, contact support.*`;
 
       // Store both raw and formatted result
       setTroubleshootingResult({

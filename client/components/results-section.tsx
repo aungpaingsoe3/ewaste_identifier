@@ -1,7 +1,7 @@
 "use client";
 import { ArrowRight, Wrench, Recycle } from "lucide-react";
 import { useAppContext } from "@/context/app-context";
-
+import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
@@ -14,19 +14,17 @@ export default function ResultsSection() {
   return (
     <div className="space-y-8 animate-fade-in">
       <Card className="p-6 md:p-8 backdrop-blur-sm bg-card/90">
-        <h2 className="text-2xl font-bold mb-4">
-          Repair Options for {deviceName}
-        </h2>
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-medium text-primary mb-2">
+            <h2 className="text-xl font-medium text-primary mb-2">
               Troubleshooting Instructions
-            </h3>
+            </h2>
             {formatted ? (
-              <div
-                className="text-sm text-muted-foreground whitespace-pre-line"
-                dangerouslySetInnerHTML={{ __html: formatted }} // Insert the formatted result as HTML
-              />
+              <div className="prose text-md text-muted-foreground dark:prose-invert max-w-none">
+                <ReactMarkdown>
+                  {formatted}
+                </ReactMarkdown>
+              </div>
             ) : (
               <p className="text-muted-foreground">
                 No troubleshooting instructions available yet.
