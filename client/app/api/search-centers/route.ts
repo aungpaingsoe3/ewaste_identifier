@@ -72,7 +72,7 @@ export async function GET(req: NextRequest) {
     }));
 
     if (minRating > 0) {
-      centers = centers.filter((c) => (c.rating || 0) >= minRating);
+      centers = centers.filter((c: { rating?: number }) => (c.rating || 0) >= minRating);
     }
 
     return NextResponse.json({ lat, lng, centers });
