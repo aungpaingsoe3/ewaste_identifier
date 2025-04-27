@@ -58,8 +58,7 @@ export default function ResultsSection() {
           </Card>
         </Link>
 
-        {/* <Link href="/recycling-repair-locations" className="block"> */}
-        <Link href="/recycling" className="block">
+        <Link href="/recycling-repair-locations" className="block">
           <Card className="h-full p-6 transition-all hover:shadow-lg hover:scale-[1.02] cursor-pointer border-2 border-accent/20 hover:border-accent">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="p-3 rounded-full bg-accent/10 text-accent">
