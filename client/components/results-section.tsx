@@ -35,7 +35,7 @@ export default function ResultsSection() {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-        <Link href="/troubleshooting" className="block">
+        <Link href="/repair" className="block">
           <Card className="h-full p-6 transition-all hover:shadow-lg hover:scale-[1.02] cursor-pointer border-2 border-primary/20 hover:border-primary">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="p-3 rounded-full bg-primary/10 text-primary">
@@ -43,21 +43,22 @@ export default function ResultsSection() {
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">
-                  Troubleshooting Guide
+                  Repair Guide
                 </h3>
                 <p className="text-muted-foreground">
-                  Step-by-step instructions to diagnose and fix common issues
+                  Step-by-step instructions to fix common issues
                   with your {deviceName}.
                 </p>
               </div>
               <Button variant="outline" className="mt-2">
-                View Troubleshooting Guide
+                View Repair Guide
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
           </Card>
         </Link>
 
+        {/* <Link href="/recycling-repair-locations" className="block"> */}
         <Link href="/recycling" className="block">
           <Card className="h-full p-6 transition-all hover:shadow-lg hover:scale-[1.02] cursor-pointer border-2 border-accent/20 hover:border-accent">
             <div className="flex flex-col items-center text-center space-y-4">
@@ -66,15 +67,14 @@ export default function ResultsSection() {
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-2">
-                  Recycling & Disposal
+                  Recycling & Repair Locations
                 </h3>
                 <p className="text-muted-foreground">
-                  Find local drop-off centers and learn how to responsibly
-                  recycle your electronics.
+                Search for local recycling centers and repair shops in one place.
                 </p>
               </div>
               <Button variant="outline" className="mt-2">
-                Explore Recycling Options
+                Locate Repair & Recycling Centers
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
