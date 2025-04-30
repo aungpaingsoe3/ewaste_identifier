@@ -1,25 +1,34 @@
-export async function getCategories() {
+export interface category {
+    topic: string
+    title: string;
+}
+export async function getCategories(): Promise<category[]> {
+    const url = 'https://www.ifixit.com/api/2.0/categories';
     try {
-        const response = await fetch('https://www.ifixit.com/api/2.0/categories');
+        const response = await fetch(url);
         if (!response.ok){
-            throw new Error(`HTTP Error! Status ${response.status}`);
+            throw new Error(`HTTP Error! Status: ${response.status}`);
         }
         const data = await response.json();
-        return data;
+        const categories: category[] = Object.values(data);
+        console.log(data);
+        return categories;
     }
     catch (error) {
-        console.error("Fetching users failed:", error);
-        throw error;
+        console.error("Fetching categories failed:", error);
+        return [];
     }
 }
 
-async function displayCategories() {
-    try{
-        const categories = await getCategories();
-        console.log(categories); 
-    }
-    catch(error){
-        console.error("Failed to display categories:", error);
-    }
+async function filterCategories(input: string): Promise<category[]> {
+    const categories = await getCategories();
+
+    const filtered = categories.filter(category =>
+        category.title.toLowerCase().includes(input.toLowerCase())
+    );
+    return filtered;
 }
-displayCategories();
+
+filterCategories("Mac").then(filtered => {
+    console.log("Filtered Categories: ", filtered);
+});
