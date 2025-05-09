@@ -1,10 +1,12 @@
+import { NextResponse } from "next/server";
+
 const IFIXIT_URL = "https://www.ifixit.com/api/2.0/categories";
 
-type Category = {
-    [key: string]: Category | null;
+type CategoryTree = {
+    [key: string]: CategoryTree | null;
 };
 
-function flattenCategories(tree: Category, parent = ""): string[] {
+function flattenCategories(tree: CategoryTree, parent = ""): string[] {
     const paths: string[] = [];
     for (const key in tree){
         const currentPath = parent ? `${parent}/${key}` : key;
@@ -23,20 +25,39 @@ function isValidDevice(userInput: string, validDevices: string[][]): boolean {
     return validDevices.some(path => path.includes(input));
 }
 
-async function runValidation(){
+export async function GET() {
     try {
-        const response = await fetch(IFIXIT_URL);
-        const categories: Category = await response.json();
+        const res = await fetch(IFIXIT_URL);
+        const tree: CategoryTree = await res.json();
+        const flatPaths = flattenCategories(tree);
 
-        const validDevices = flattenCategories(categories);
-        const validDevicesLowered = validDevices.map(path => path.split("/").map(segment => segment.toLowerCase()));
+        const unique = new Set<string>();
+        flatPaths.forEach(path => {
+            path.split("/").forEach(segment => unique.add(segment.toLowerCase()));
+        });
 
-        console.log(isValidDevice("Macbook Air", validDevicesLowered));
-        // console.log(isValidDevice("sagr", validDevicesLowered));
+        return NextResponse.json({ categories: Array.from(unique) });
     }
-    catch (error){
-        console.error("Error fetching or validing categories", error);
+    catch (err) {
+        console.error("Failed to Load categories", err);
+        return NextResponse.json({ error: "Unable to load categories" }, { status: 500 });
     }
 }
 
-runValidation();
+// async function runValidation(){
+//     try {
+//         const response = await fetch(IFIXIT_URL);
+//         const categories: Category = await response.json();
+
+//         const validDevices = flattenCategories(categories);
+//         const validDevicesLowered = validDevices.map(path => path.split("/").map(segment => segment.toLowerCase()));
+
+//         console.log(isValidDevice("Macbook Air", validDevicesLowered));
+//         // console.log(isValidDevice("sagr", validDevicesLowered));
+//     }
+//     catch (error){
+//         console.error("Error fetching or validing categories", error);
+//     }
+// }
+
+// runValidation();
