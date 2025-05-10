@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
-import { escapeHTML } from "@/app/api/data-validation/santize"
 
 interface DeviceFormProps {
   formData: {
@@ -21,31 +20,24 @@ interface DeviceFormProps {
 }
 
 export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange }: DeviceFormProps) {
-  console.log("Current deviceName: ", formData.deviceName)
   const [suggestions, setSuggestions] = React.useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = React.useState(false)
 
   React.useEffect(() => {
     const fetchSuggestions = async () => {
-      // console.log("Fetching suggestions...")
       try {
         const res = await fetch("/api/data-validation")
-        // console.log("Fetching response:", res)
         const data = await res.json()
-        // console.log("Parsed JSON: ", data)
         const categories = data.categories || []
-        // console.log("Fetched Categories: ", categories)
 
         if (formData.deviceName) {
           const filtered = categories.filter((item: string) => 
             item.toLowerCase().includes(formData.deviceName.toLowerCase())
           )
-          // console.log("Filtered Categories:", filtered)
           setSuggestions(filtered.slice(0, 20))
           setShowSuggestions(true)
         }
         else {
-          // console.log("No categories")
           setSuggestions([])
           setShowSuggestions(false)
         }
