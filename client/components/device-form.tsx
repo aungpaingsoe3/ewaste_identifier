@@ -34,7 +34,7 @@ export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange 
           const filtered = categories.filter((item: string) => 
             item.toLowerCase().includes(formData.deviceName.toLowerCase())
           )
-          setSuggestions(filtered.slice(0, 20))
+          setSuggestions(filtered.slice(0, 25))
           setShowSuggestions(true)
         }
         else {
@@ -85,7 +85,7 @@ export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange 
                 {suggestions.map((suggestion, index) => (
                   <li
                     key={index}
-                    className="px-4 py-2 text-white hover:bg-gray-100 cursor-pointer"
+                    className="px-4 py-2 text-white hover:bg-green-500 hover:text-black cursor-pointer"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
                     {suggestion}
