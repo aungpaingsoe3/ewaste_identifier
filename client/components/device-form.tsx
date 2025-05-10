@@ -1,8 +1,7 @@
 "use client"
 
-import type * as React from "react"
+import * as React from "react"
 import { ArrowRight, Loader2 } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -21,6 +20,45 @@ interface DeviceFormProps {
 }
 
 export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange }: DeviceFormProps) {
+  const [suggestions, setSuggestions] = React.useState<string[]>([])
+  const [showSuggestions, setShowSuggestions] = React.useState(false)
+
+  React.useEffect(() => {
+    const fetchSuggestions = async () => {
+      try {
+        const res = await fetch("/api/data-validation")
+        const data = await res.json()
+        const categories = data.categories || []
+
+        if (formData.deviceName) {
+          const filtered = categories.filter((item: string) => 
+            item.toLowerCase().includes(formData.deviceName.toLowerCase())
+          )
+          setSuggestions(filtered.slice(0, 25))
+          setShowSuggestions(true)
+        }
+        else {
+          setSuggestions([])
+          setShowSuggestions(false)
+        }
+      }
+      catch (err) {
+        console.error("Failed to fetch categories: ", err)
+        setSuggestions([])
+        setShowSuggestions(false)
+      }
+    }
+    fetchSuggestions()
+  }, [formData.deviceName])
+
+  const handleSuggestionClick = (suggestion: string) => {
+    const syntheticEvent = {
+      target: { name:"deviceName", value: suggestion }
+    } as React.ChangeEvent<HTMLInputElement>
+    onChange(syntheticEvent)
+    setShowSuggestions(false)
+  }
+
   return (
     <Card className="p-6 md:p-8 animate-fade-in backdrop-blur-sm bg-card/90">
       <form onSubmit={onSubmit} className="space-y-6">
@@ -33,14 +71,28 @@ export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange 
               onChange={onChange}
               className="peer pt-6 pb-2"
               placeholder=" "
+              autoComplete="off"
               required
             />
             <Label
               htmlFor="deviceName"
               className="absolute left-3 top-2 text-xs text-muted-foreground peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-xs transition-all"
             >
-              Device Name
+              Device Name (Brand and Model)
             </Label>
+            {showSuggestions && suggestions.length > 0 && (
+              <ul className="absolute z-10 mt-1 w-full bg-card/90 border border-gray-200 rounded-md shadow-md max-h-40 overflow-auto">
+                {suggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    className="px-4 py-2 text-white hover:bg-green-500 hover:text-black cursor-pointer"
+                    onClick={() => handleSuggestionClick(suggestion)}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
 
