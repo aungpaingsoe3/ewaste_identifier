@@ -1,14 +1,14 @@
 "use client"
 
-import type * as React from "react"
+import * as React from "react"
 import { ArrowRight, Loader2 } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
+import { escapeHTML } from "@/app/api/data-validation/santize"
 
 interface DeviceFormProps {
   formData: {
@@ -21,6 +21,52 @@ interface DeviceFormProps {
 }
 
 export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange }: DeviceFormProps) {
+  console.log("Current deviceName: ", formData.deviceName)
+  const [suggestions, setSuggestions] = React.useState<string[]>([])
+  const [showSuggestions, setShowSuggestions] = React.useState(false)
+
+  React.useEffect(() => {
+    const fetchSuggestions = async () => {
+      console.log("Fetching suggestions...")
+      try {
+        const res = await fetch("/api/data-validation")
+        console.log("Fetching response:", res)
+        const data = await res.json()
+        console.log("Parsed JSON: ", data)
+        const categories = data.categories || []
+        console.log("Fetched Categories: ", categories)
+
+        if (formData.deviceName) {
+          const filtered = categories.filter((item: string) => 
+            item.toLowerCase().includes(formData.deviceName.toLowerCase())
+          )
+          console.log("Filtered Categories:", filtered)
+          setSuggestions(filtered.slice(0, 5))
+          setShowSuggestions(true)
+        }
+        else {
+          console.log("No categories")
+          setSuggestions([])
+          setShowSuggestions(false)
+        }
+      }
+      catch (err) {
+        console.error("Failed to fetch categories: ", err)
+        setSuggestions([])
+        setShowSuggestions(false)
+      }
+    }
+    fetchSuggestions()
+  }, [formData.deviceName])
+
+  const handleSuggestionClick = (suggestion: string) => {
+    const syntheticEvent = {
+      target: { name:"deviceName", value: suggestion }
+    } as React.ChangeEvent<HTMLInputElement>
+    onChange(syntheticEvent)
+    setShowSuggestions(false)
+  }
+
   return (
     <Card className="p-6 md:p-8 animate-fade-in backdrop-blur-sm bg-card/90">
       <form onSubmit={onSubmit} className="space-y-6">
@@ -33,14 +79,28 @@ export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange 
               onChange={onChange}
               className="peer pt-6 pb-2"
               placeholder=" "
+              autoComplete="off"
               required
             />
             <Label
               htmlFor="deviceName"
               className="absolute left-3 top-2 text-xs text-muted-foreground peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-xs transition-all"
             >
-              Device Name
+              Device Name (Brand and Model)
             </Label>
+            {showSuggestions && suggestions.length > 0 && (
+              <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-md max-h-40 overflow-auto">
+                {suggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    className="px-4 py-2 text-black hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleSuggestionClick(suggestion)}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
 
