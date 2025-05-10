@@ -27,25 +27,25 @@ export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange 
 
   React.useEffect(() => {
     const fetchSuggestions = async () => {
-      console.log("Fetching suggestions...")
+      // console.log("Fetching suggestions...")
       try {
         const res = await fetch("/api/data-validation")
-        console.log("Fetching response:", res)
+        // console.log("Fetching response:", res)
         const data = await res.json()
-        console.log("Parsed JSON: ", data)
+        // console.log("Parsed JSON: ", data)
         const categories = data.categories || []
-        console.log("Fetched Categories: ", categories)
+        // console.log("Fetched Categories: ", categories)
 
         if (formData.deviceName) {
           const filtered = categories.filter((item: string) => 
             item.toLowerCase().includes(formData.deviceName.toLowerCase())
           )
-          console.log("Filtered Categories:", filtered)
-          setSuggestions(filtered.slice(0, 5))
+          // console.log("Filtered Categories:", filtered)
+          setSuggestions(filtered.slice(0, 20))
           setShowSuggestions(true)
         }
         else {
-          console.log("No categories")
+          // console.log("No categories")
           setSuggestions([])
           setShowSuggestions(false)
         }
@@ -89,11 +89,11 @@ export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange 
               Device Name (Brand and Model)
             </Label>
             {showSuggestions && suggestions.length > 0 && (
-              <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-md max-h-40 overflow-auto">
+              <ul className="absolute z-10 mt-1 w-full bg-card/90 border border-gray-200 rounded-md shadow-md max-h-40 overflow-auto">
                 {suggestions.map((suggestion, index) => (
                   <li
                     key={index}
-                    className="px-4 py-2 text-black hover:bg-gray-100 cursor-pointer"
+                    className="px-4 py-2 text-white hover:bg-gray-100 cursor-pointer"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
                     {suggestion}
