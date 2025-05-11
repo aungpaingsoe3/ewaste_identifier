@@ -10,7 +10,10 @@ export default function ResultsSection() {
   const { formData, troubleshootingResult, resetForm } = useAppContext();
   const { deviceName, issue } = formData;
   const { formatted, raw } = troubleshootingResult;
-
+  const query = deviceName + " " + issue;
+  const encodedQuery = encodeURIComponent(query.trim());
+  const ifixitUrl = `https://www.ifixit.com/Search?query=${encodedQuery}`;
+  
   return (
     <div className="space-y-8 animate-fade-in">
       <Card className="p-6 md:p-8 backdrop-blur-sm bg-card/90">
@@ -35,27 +38,28 @@ export default function ResultsSection() {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-        <Link href="/repair" className="block">
-          <Card className="h-full p-6 transition-all hover:shadow-lg hover:scale-[1.02] cursor-pointer border-2 border-primary/20 hover:border-primary">
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="p-3 rounded-full bg-primary/10 text-primary">
-                <Wrench className="h-8 w-8" />
+        <Link href={ifixitUrl} passHref legacyBehavior className="block">
+          <a target="_blank" rel="noopener noreferrer">
+            <Card className="h-full p-6 transition-all hover:shadow-lg hover:scale-[1.02] cursor-pointer border-2 border-primary/20 hover:border-primary">
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="p-3 rounded-full bg-primary/10 text-primary">
+                  <Wrench className="h-8 w-8" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">
+                  Repair Guides
+                  </h3>
+                  <p className="text-muted-foreground">
+                  Find detailed repair guides to fix your {deviceName} {issue} on iFixit.
+                  </p>
+                </div>
+                <Button variant="outline" className="mt-2">
+                  Explore Guides
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">
-                  Repair Guide
-                </h3>
-                <p className="text-muted-foreground">
-                  Step-by-step instructions to fix common issues
-                  with your {deviceName}.
-                </p>
-              </div>
-              <Button variant="outline" className="mt-2">
-                View Repair Guide
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          </Card>
+            </Card>
+          </a>
         </Link>
 
         <Link href="/recycling-repair-locations" className="block">
@@ -69,7 +73,7 @@ export default function ResultsSection() {
                   Recycling & Repair Locations
                 </h3>
                 <p className="text-muted-foreground">
-                Search for local recycling centers and repair shops in one place.
+                  Search for local recycling centers and repair shops in one place.
                 </p>
               </div>
               <Button variant="outline" className="mt-2">
