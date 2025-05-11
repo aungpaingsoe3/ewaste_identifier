@@ -12,7 +12,7 @@ export default function ResultsSection() {
   const { formatted, raw } = troubleshootingResult;
   const query = deviceName + " " + issue;
   const encodedQuery = encodeURIComponent(query.trim());
-  const ifixitUrl = `https://www.ifixit.com/Search?query=${encodedQuery}`;
+  const ifixitUrl = `https://www.ifixit.com/Search?doctype=guide&query=${encodedQuery}`;
   
   return (
     <div className="space-y-8 animate-fade-in">
