@@ -81,11 +81,11 @@ export default function DeviceForm({ formData, isSubmitting, onSubmit, onChange 
               Device Name (Brand and Model)
             </Label>
             {showSuggestions && suggestions.length > 0 && (
-              <ul className="absolute z-10 mt-1 w-full bg-card/90 border border-gray-200 rounded-md shadow-md max-h-40 overflow-auto">
+              <ul className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-md shadow-md max-h-40 overflow-auto">
                 {suggestions.map((suggestion, index) => (
                   <li
                     key={index}
-                    className="px-4 py-2 text-white hover:bg-green-500 hover:text-black cursor-pointer"
+                    className="px-4 py-2 text-black dark:text-white hover:bg-green-600 hover:text-black dark:hover:text-white cursor-pointer"
                     onClick={() => handleSuggestionClick(suggestion)}
                   >
                     {suggestion}
