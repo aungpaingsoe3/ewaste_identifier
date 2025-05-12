@@ -10,7 +10,7 @@ export default function ResultsSection() {
   const { formData, troubleshootingResult, resetForm } = useAppContext();
   const { deviceName, issue } = formData;
   const { formatted, raw } = troubleshootingResult;
-  const query = deviceName + " " + issue;
+  const query = deviceName;
   const encodedQuery = encodeURIComponent(query.trim());
   const ifixitUrl = `https://www.ifixit.com/Search?doctype=guide&query=${encodedQuery}`;
   
