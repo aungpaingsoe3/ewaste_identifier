@@ -11,17 +11,20 @@ Follow the steps below to get the project up and running on your local machine.
 
 1. Clone the Repository
 
-'''bash
+```bash
 git clone https://github.com/aungpaingsoe3/ewaste_identifier.git
-cd ewaste_identifier
+cd ewaste_identifier/client
+```
 
 2. Set Environment Variables
 
 Create a .env.local file inside the client folder and add the following environment variables:
 
+```.env.local
 GOOGLE_MAPS_API_KEY=<insert-valid-api-key-here>
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=<insert-prev-api-key-here>
 NEXT_PUBLIC_GEMINI_API_KEY=<insert-valid-gemini-key-here>
+```
 
 💡 Replace the placeholders with your actual API keys.
 
@@ -29,7 +32,9 @@ NEXT_PUBLIC_GEMINI_API_KEY=<insert-valid-gemini-key-here>
 
 Install the required packages by running:
 
+```bash
 npm install
+```
 
 This will install dependencies such as:
 
@@ -41,12 +46,16 @@ This will install dependencies such as:
 
 Generate an optimized production build:
 
+```bash
 npm run build
+```
 
 5. Start the Application
 
 Run the app locally for testing:
 
+```bash
 npm start
+```
 
 ✅ You’re all set! Explore the app and help promote responsible e-waste recycling.
