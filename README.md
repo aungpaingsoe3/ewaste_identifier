@@ -16,6 +16,9 @@ By promoting repairs, reuse, and proper recycling, the app helps users save mone
 
 
 
+
+
+
 ### How to Run the Web Application
 
 ## 🚀 Setup Instructions
