@@ -3,6 +3,11 @@
 
 ### Project Description
 
+  This project provides a software web application solution to help you manage your electronic devices better. Many people replace devices that either break or no longer fit their needs. Often, these old devices are not disposed of correctly. This leads to those old devices lying around in their homes, which leads to e-waste pollution. Our platform offers solutions to those problems. After inputting the device name and its issue, it helps you troubleshoot the issue and provides a website where you can find repair guides through iFixIt. We also connect you with the local repair shops and suggest recycling or trade-in programs. If you need a new device, we offer personalized recommendations. This app aims to save you money and reduce electronic waste.
+	Ultimately, this project aims to address the problem of e-waste pollution by allowing users to be aware of e-waste pollution and practice e-waste recycling by providing local recycling centers so that old electronic devices can be recycled effectively, rather than leaving the old device around.
+
+
+
 ### How to Run the Web Application
 
 ## 🚀 Setup Instructions
