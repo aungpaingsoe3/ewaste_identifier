@@ -11,8 +11,10 @@ Follow the steps below to get the project up and running on your local machine.
 
 1. Clone the Repository
 
+'''bash
 git clone https://github.com/aungpaingsoe3/ewaste_identifier.git
 cd ewaste_identifier
+'''
 
 2. Set Environment Variables
 
