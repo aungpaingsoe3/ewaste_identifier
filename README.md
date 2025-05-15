@@ -1,7 +1,9 @@
 # E-Waste Identifier by F4 (Group 4)
 ## Group Members: Aung Paing Soe, Kyaw Soe Han, Trong Le, William Ngo
 
-<ins>**NOTE:**</ins> The documentation files, such as the Description/Requirements document and the Architectural Diagrams document, can be found inside the ```documentation``` folder. The Presentation Slide Deck can also be found in the same folder. The Demo Video is embedded within the presentation slide deck.  
+<ins>**Git URL:**</ins> https://github.com/aungpaingsoe3/ewaste_identifier.git
+
+<ins>**NOTE:**</ins> The source code can be viewed inside the ```client``` folder of this GitHub repository. The documentation files, such as the Description/Requirements document and the Architectural Diagrams document, can be found inside the ```documentation``` folder of this GitHub repository. The Presentation Slide Deck can also be found in the same folder. The Demo Video is embedded within the presentation slide deck.  
 
 ## Project Description
 
