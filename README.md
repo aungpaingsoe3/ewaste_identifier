@@ -9,7 +9,6 @@ This web app helps users manage their electronic devices and reduce e-waste by o
 - **Troubleshooting:** Get support by entering the device name and issue.
 - **Repair Guides:** Access iFixIt guides and nearby repair shops.
 - **Sustainable Disposal:** Find local recycling centers and trade-in options.
-- **Personalized Recommendations:** Receive device suggestions when replacement is needed.
 
 ## **Impact**
 By promoting repairs, reuse, and proper recycling, the app helps users save money and reduce e-waste pollution.
