@@ -71,7 +71,7 @@ npm start
 
 You’re all set! Explore the app and help promote responsible e-waste recycling.
 
-## How to Use the Application
+## How to Use the Web Application
 
 1. Enter your device name, and as you enter, you will see a suggestion box pop up. Select your device from the suggested devices list.
 
