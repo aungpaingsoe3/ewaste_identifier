@@ -20,11 +20,6 @@ function flattenCategories(tree: CategoryTree, parent = ""): string[] {
     return paths;
 }
 
-// function isValidDevice(userInput: string, validDevices: string[][]): boolean {
-//     const input = userInput.trim().toLowerCase();
-//     return validDevices.some(path => path.includes(input));
-// }
-
 export async function GET() {
     try {
         const res = await fetch(IFIXIT_URL);
@@ -43,21 +38,3 @@ export async function GET() {
         return NextResponse.json({ error: "Unable to load categories" }, { status: 500 });
     }
 }
-
-// async function runValidation(){
-//     try {
-//         const response = await fetch(IFIXIT_URL);
-//         const categories: CategoryTree = await response.json();
-
-//         const validDevices = flattenCategories(categories);
-//         const validDevicesLowered = validDevices.map(path => path.split("/").map(segment => segment.toLowerCase()));
-
-//         console.log(isValidDevice("Macbook Air", validDevicesLowered));
-//         console.log(isValidDevice("sagr", validDevicesLowered));
-//     }
-//     catch (error){
-//         console.error("Error fetching or validing categories", error);
-//     }
-// }
-
-// runValidation();
